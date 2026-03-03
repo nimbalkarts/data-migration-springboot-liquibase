@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/sql/001-create-tables.sql
+      relativeToChangelogFile: false
+  - include:
+      file: db/changelog/sql/002-insert-default-roles.sql
+      relativeToChangelogFile: false
+  - include:
+      file: db/changelog/sql/003-backfill-usernames.sql
+      relativeToChangelogFile: false

@@ -1,3 +1,11 @@
 spring:
   application:
     name: data-migration-springboot-liquibase
+datasource:
+  url: jdbc:postgresql://localhost:5432/mydb
+  username: myuser
+  password: mypass
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.sql
+    enabled: true
+    contexts: dev # comma separated list of env where script with mentioned context will get executed
