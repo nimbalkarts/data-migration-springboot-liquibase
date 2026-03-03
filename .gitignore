@@ -1,37 +1,83 @@
-HELP.md
-.gradle
-build/
-!gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
-
-### IntelliJ IDEA ###
-.idea
-*.iws
+# -------------------------
+# IntelliJ IDEA
+# -------------------------
+.idea/
 *.iml
-*.ipr
-out/
-!**/src/main/**/out/
-!**/src/test/**/out/
+# Optional: ignore workspace and run configs that are user-specific
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/dictionaries/
+.idea/gradle.xml
+.idea/usage.statistics.xml
+# Keep code style and shared settings if your team commits them:
+# .idea/codeStyles/
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
+# -------------------------
+# Gradle
+# -------------------------
+/.gradle/
+/build/
+/out/
+# Gradle wrapper files should usually be committed (gradle/wrapper/gradle-wrapper.jar and properties)
 
-### VS Code ###
+# -------------------------
+# Java
+# -------------------------
+*.class
+*.jar
+*.war
+*.ear
+
+# -------------------------
+# Spring Boot / config / secrets
+# -------------------------
+# Ignore local config files that may contain secrets
+/src/main/resources/application-*.yml
+# Keep an example config for repo
+!src/main/resources/application.yml.example
+
+# -------------------------
+# Logs and temp
+# -------------------------
+*.log
+logs/
+tmp/
+temp/
+*.tmp
+
+# -------------------------
+# OS files
+# -------------------------
+.DS_Store
+Thumbs.db
+
+# -------------------------
+# IDEs and editors (other)
+# -------------------------
 .vscode/
+*.swp
+*~.nib
+*.sublime-workspace
+*.sublime-project
+
+# -------------------------
+# Test / coverage / reports
+# -------------------------
+/coverage/
+/reports/
+/test-results/
+
+# -------------------------
+# Build tool / CI
+# -------------------------
+# local gradle properties that may contain credentials
+gradle.properties
+# If you commit gradle.properties for CI, remove the above line
+
+# -------------------------
+# Misc
+# -------------------------
+.env
+.env.local
+.env.*.local
+.secrets/
