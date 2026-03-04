@@ -1,95 +1,125 @@
-# data-migration-springboot-liquibase
+# \# Data Migration with Spring Boot \& Liquibase
 
-Spring Boot 3, Gradle build, Liquibase changelogs written in SQL format, target database PostgreSQL
+# 
 
-
-
-
-
-Spring Boot will pick up spring.liquibase.change-log and run Liquibase on startup unless spring.liquibase.enabled is set to false. Use contexts to limit changesets per environment.
+ This project demonstrates database migrations using **Spring Boot 3**, **Gradle**, and **Liquibase** with SQL‑formatted changelogs. Target database: **PostgreSQL**.
 
 
+---
 
-SQL formatted changelogs — layout
+## Liquibase Integration
 
-Where to place: src/main/resources/db/changelog/
+- Spring Boot automatically runs Liquibase on startup using `spring.liquibase.change-log`.  
 
-Master file: db.changelog-master.sql can include other SQL files or contain multiple changesets inline.
+- Disable with `spring.liquibase.enabled=false`.  
 
+- Use \*\*contexts\*\* to control which changesets run in different environments.
 
-
-SQL formatted changelog rules
-
-\- Start each file (or the first file) with --liquibase formatted sql.
-
-\- Each changeset begins with --changeset author:id.
-
-\- Optionally include --rollback immediately after the changeset.
+---
 
 
+## SQL Changelog Layout
 
-What contexts are?
+- Place changelogs in: `src/main/resources/db/changelog/`  
 
-changesets run in a given execution. Use contexts to target changes to specific environments, features, or deployment phases. Context filters are logical expressions and are evaluated at runtime to include or exclude changesets
+ - Master file: `db.changelog-master.sql`  
 
+ - Can include other SQL files  
 
+ - Or contain multiple inline changesets
+ 
 
-
-
-Running migrations: dev, CI, and production
-
-Local development
-
-\- Let Spring Boot auto‑run Liquibase on app startup (fast feedback). For preview, use the Gradle plugin or Liquibase CLI to generate SQL without applying.
+### Rules
 
 
+\- Start each file with:  
 
-Preview SQL (recommended for PRs)
+```sql
 
-\# Liquibase CLI
+ --liquibase formatted sql
 
-liquibase --changeLogFile=src/main/resources/db/changelog/db.changelog-master.sql updateSQL
+```
 
+\- Each changeset begins with:  
 
+```sql
+ --changeset author:id
+ ```
 
-\# Gradle plugin (task name may vary)
+\- Optionally add rollback logic with:  
 
-./gradlew updateSql
+```sql
+ --rollback <SQL>
+```
 
-Review generated SQL in code review to catch unintended DDL/DML.
+---
 
+## Contexts 
 
+\- Contexts filter which changesets run in a given execution.  
 
-CI / Production
+\- Useful for environment‑specific, feature‑specific, or phased deployments.  
 
-\- Preferred pattern: run Liquibase as a controlled CI/CD job that applies migrations to the target DB before deploying application instances. This avoids multiple app instances racing to run migrations and reduces startup locking issues. Use contexts or labels to gate environment‑specific changes
-
-
-
-
-
-Safe data migration patterns and best practices
-
-\- Small, focused changesets: one logical change per changeset for traceability.
-
-\- Idempotency: write SQL so re‑running is safe (IF NOT EXISTS, WHERE NOT EXISTS).
-
-\- Staged deploys for destructive changes: add new column → backfill in separate changeset → switch reads/writes → drop old column later.
-
-\- Backups and snapshots: always snapshot or export data before irreversible transforms.
-
-\- Batch large updates: update in chunks (by primary key ranges) to avoid long locks.
-
-\- Rollback planning: include --rollback when feasible; if not possible, document and ensure backups.
-
-\- Never edit applied changesets: if a changeset has been applied in any environment, create a new changeset to change behavior.
+\- Filters are logical expressions evaluated at runtime.
 
 
+---
 
 
+## Running Migrations
 
 
+### Local Development
 
+\- Let Spring Boot auto‑run Liquibase on startup for fast feedback.  
+
+\- For preview, generate SQL without applying changes:
+
+
+ ### Liquibase CLI
+  
+```bash
+ liquibase --changeLogFile=src/main/resources/db/changelog/db.changelog-master.sql updateSQL
+``` 
+
+ ### Gradle plugin (task name may vary)
+```bash
+ ./gradlew updateSql
+``` 
+> Recommended for PRs: review generated SQL to catch unintended DDL/DML.
+
+
+### CI / Production
+
+- Run Liquibase as a \*\*controlled CI/CD job\*\* before deploying application instances.  
+
+- Prevents race conditions and startup locking issues.  
+
+- Use contexts/labels to gate environment‑specific changes.
+
+---
+ 
+
+## Best Practices for Safe Data Migration
+
+
+- **Small, focused changesets** → one logical change per changeset.  
+ 
+ - **Idempotency** → use `IF NOT EXISTS`, `WHERE NOT EXISTS`.  
+
+- **Staged deploys** for destructive changes:  
+
+- Add new column → backfill → switch reads/writes → drop old column later.  
+
+- **Backups \& snapshots** before irreversible transforms.  
+
+- **Batch updates** → process in chunks to avoid long locks.  
+
+- **Rollback planning** → include `--rollback` when feasible; otherwise document and ensure backups.  
+
+- **Never edit applied changesets** → always create a new changeset for modifications.
+
+---
 
 
 
